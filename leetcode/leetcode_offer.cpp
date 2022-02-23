@@ -3,16 +3,18 @@
 */
 #include<iostream>
 #include<vector>
+#include<map>
+#include<string>
 
 using namespace std;
 
 /* 简单题目 */
 
 /* 
-题号 ：No.30
-要求：定义栈的数据结构，请在该类型中实现一个能够得到栈
-      的最小元素的 min 函数在该栈中，调用 min、push 
-      及 pop 的时间复杂度都是 O(1)。
+ * @题号 : 剑指offer 30
+ * @要求 : 定义栈的数据结构，请在该类型中实现一个能够得到栈
+ *         的最小元素的 min 函数在该栈中，调用 min、push 
+ *         及 pop 的时间复杂度都是 O(1)。
 */
 class MinStack {
 private:
@@ -47,6 +49,30 @@ public:
     int min() {
         map<int,int>::iterator item = this->buffer_check.begin();
         return item->first;
+    }
+};
+
+/*
+ * @题目 : 剑指offer 03
+ * @要求 : 找出数组中重复的数字。
+ *         在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。
+ *         数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每
+ *         个数字重复了几次。请找出数组中任意一个重复的数字。
+ */
+
+class Solution {
+public:
+    int findRepeatNumber(vector<int>& nums) {
+        map<int, int> cache_map;
+        int result = NULL;
+        for(int i = 0; i < nums.size(); i++){
+            cache_map[nums[i]] ++;
+            if(cache_map[nums[i]] > 1){
+                result = nums[i];
+                break;
+            }
+        }
+        return result;
     }
 };
 
