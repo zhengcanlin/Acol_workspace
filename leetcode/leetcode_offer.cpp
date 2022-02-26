@@ -76,6 +76,26 @@ public:
     }
 };
 
+/*
+ * @题目 : 剑指offer 62
+ * @要求 : 0,1,···,n-1这n个数字排成一个圆圈，从数字0开始，每次从这个圆圈里删除第m个数字
+ *        （删除后从下一个数字开始计数）。求出这个圆圈里剩下的最后一个数字。
+ *         例如，0、1、2、3、4这5个数字组成一个圆圈，从数字0开始每次删除第3个数字，
+ *         则删除的前4个数字依次是2、0、4、1，因此最后剩下的数字是3。
+ */
+class Solution {
+public:
+    int lastRemaining(int n, int m) {
+        int result = 0;
+        for(int i = 2; i <= n; i++){
+            result = (result + m) % i;
+        }
+        return result;
+    }
+};
+
+
+
 
 /*========================================================================*/
 
@@ -125,7 +145,23 @@ public:
     }
 };
 
-
+/*
+ * @题目 : 剑指offer 63
+ * @要求 : 假设把某股票的价格按照时间先后顺序存储在数组中，
+ *         请问买卖该股票一次可能获得的最大利润是多少？
+ */
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        vector<int> result = {0};
+        int min_prices = prices[0];
+        for(int i = 1; i < prices.size(); i++){
+            result.push_back(max(result.back(), prices[i] - min_prices));
+            min_prices = min(min_prices, prices[i]);
+        }
+        return result.back();
+    }
+};
 /*========================================================================*/
 
 
