@@ -5,6 +5,7 @@
 #include<vector>
 #include<map>
 #include<string>
+#include<algorithm>
 
 using namespace std;
 
@@ -95,8 +96,6 @@ public:
 };
 
 
-
-
 /*========================================================================*/
 
 
@@ -160,6 +159,45 @@ public:
             min_prices = min(min_prices, prices[i]);
         }
         return result.back();
+    }
+};
+
+/*
+ * @题目 : 剑指offer 47
+ * @要求 : 在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。
+ *         你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达
+ *         棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+ * @考察类型 : 动态规化
+ */
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& grid) {
+        int h,w;
+        h = grid.size();
+        w = grid[0].size();
+        vector<vector<int>> result(h, vector<int>(w, 0));
+        for(int i = 0; i < h; i++){
+            for(int j = 0; j < w; j++){
+                if(i == 0 && j == 0){
+                    result[i][j] = grid[i][j];
+                }
+                else{
+                    if(i == 0 || j == 0){
+                        if(i == 0 && j != 0){
+                            result[i][j] = result[i][j-1] + grid[i][j];
+                        }
+                        else if(i != 0 && j == 0){
+                            result[i][j] = result[i-1][j] + grid[i][j];
+                        }
+                    }
+                    else{
+                        result[i][j] = max(result[i-1][j] + grid[i][j], result[i][j-1] + grid[i][j]);
+                    }
+                }
+            }
+        }
+        return result[h-1][w-1];
+
     }
 };
 /*========================================================================*/
