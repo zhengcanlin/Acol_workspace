@@ -95,6 +95,32 @@ public:
     }
 };
 
+/*
+ * @题目 : 剑指offer 39
+ * @要求 : 数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。
+ */
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int n = nums.size();
+        map<int, int> dictionary;
+        for(int i = 0; i < n; i++){
+            dictionary[nums[i]]++;
+        }
+        map<int, int>::iterator item = dictionary.begin();
+        n = int(n / 2);
+        int result;
+        while(item != dictionary.end()){
+            if(item->second >= n){
+                result = item->first;
+                break;
+            }
+            item++;
+        }
+        return result;
+    }
+};
+
 
 /*========================================================================*/
 
@@ -364,6 +390,46 @@ public:
             }
         }
         return dp[n-1];
+    }
+};
+
+/*
+ * @题目 : 剑指offer 38
+ * @要求 : 输入一个字符串，打印出该字符串中字符的所有排列。你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。
+ * @考察类型 : 深度优先遍历
+ * @input : "abc"
+ * @output : ["abc","acb","bac","bca","cab","cba"]
+ */
+
+class Solution {
+public:
+    vector<string> result;
+
+    void DFS(vector<char> characters, vector<int>& visits, string str, int n){
+        if(str.length() == n){
+            result.push_back(str);
+            return;
+        }
+        for(int i = 0; i < characters.size(); i++){
+            if(visits[i] == 0){
+                visits[i] = 1;
+                DFS(characters, visits, str+characters[i], n);
+                visits[i] = 0;
+            }
+        }
+    }
+
+    vector<string> permutation(string s) {
+        vector<char> characters;
+        int n = s.length();
+        vector<int> visits(n, 0);
+        for(int i = 0; i < n; i++){
+            characters.push_back(s[i]);
+        }
+        DFS(characters, visits, "", n);
+        sort(result.begin(), result.end());
+        result.erase(unique(result.begin(), result.end()), result.end());
+        return result;
     }
 };
 
