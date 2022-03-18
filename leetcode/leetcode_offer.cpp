@@ -10,6 +10,40 @@
 using namespace std;
 
 /* 简单题目 */
+/* 
+ * @题号 : 剑指offer 001
+ * @要求 : 给定两个整数 a 和 b ，求它们的除法的商 a/b ，要求不得使用乘号 '*'、除号 '/' 以及求余符号 '%' 
+ * @考察内容 ：数学逻辑
+ * @input : a=15, b = 2
+ * @output : 7
+ */
+class Solution {
+private:
+    typedef int SIGN;
+public:
+    int divide(int a, int b) {
+        if(a == INT_MIN && b == -1){
+            return INT_MAX;
+        }
+        SIGN sign = (a > 0) ^ (b > 0) ? -1 : 1;
+        if(a > 0){ a = -a; }
+        if(b > 0){ b = -b; }
+
+        int result = 0;
+        while(a <= b){
+            int value = b;
+            int k = 1;
+            while(value >= 0xc0000000 && a <= value + value){
+                value += value;
+                if(k > INT_MAX / 2) return INT_MIN;
+                k += k;
+            }
+            a -= value;
+            result += k;
+        }
+        return sign == -1 ? -result : result;
+    }
+};
 
 /* 
  * @题号 : 剑指offer 30
@@ -429,6 +463,83 @@ public:
         DFS(characters, visits, "", n);
         sort(result.begin(), result.end());
         result.erase(unique(result.begin(), result.end()), result.end());
+        return result;
+    }
+};
+
+/*
+ * @题目 : 剑指offer 67
+ * @要求 : 写一个函数 StrToInt，实现把字符串转换成整数这个功能。不能使用 atoi 或者其他类似的库函数。
+ *         
+ *         首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。
+ *         当我们寻找到的第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字组合起来，
+ *         作为该整数的正负号；假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成整数。
+ *         该字符串除了有效的整数部分之后也可能会存在多余的字符，这些字符可以被忽略，它们对于函数不应该造成影响。
+ *         注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换。
+ *         在任何情况下，若函数不能进行有效的转换时，请返回 0。
+ * 
+ *         假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−2^31,  2^(31 − 1)]。
+ *         如果数值超过这个范围，请返回  INT_MAX (2^(31 − 1)) 或 INT_MIN (−2^31) 。
+ * @考察类型 : 工程能力
+ * @input : "42"
+ * @output : 42
+ */
+class Solution {
+typedef bool FLAG;
+typedef int SYMBOL;
+typedef long long INT64;
+public:
+    int strToInt(string str) {
+        INT64 result = 0;
+        FLAG sflag = false;
+        FLAG flag = false;
+        SYMBOL symbol = 1;
+
+        for(auto ch : str){
+            if((ch >= '0' && ch <= '9')||ch == '+' || ch == '-'){
+                if(ch >= '0' && ch <= '9'){
+                    flag = true;
+                }
+                if(ch == '+' || ch == '-'){
+                    if(flag == false){
+                        if(sflag == false){
+                            flag = true;
+                            if(ch == '-'){
+                                symbol = -1;
+                            }
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                    else{
+                        break;
+                    }
+                }
+                else{
+                    INT64 temp = result;
+                    temp = temp * 10 + (ch - '0');
+                    temp = temp * symbol;
+                    if(temp > INT_MAX){
+                        result = INT_MAX;
+                        break;
+                    }
+                    if(temp < INT_MIN){
+                        result = INT_MIN;
+                        break;
+                    }
+                    result = result * 10 + (ch - '0');
+                }
+            }
+            else if(ch == ' '){
+                if(flag == false && sflag == false) continue;
+                else break;
+            }
+            else{
+                break;
+            }
+        }
+        result = result * symbol;
         return result;
     }
 };
